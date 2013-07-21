@@ -80,7 +80,7 @@ If you're precompiling your templates on server (eg. using a tool like [grunt-ho
 
 ``` js
 	$.tempera.templateRequires.push({
-		filter: /forms\/.*/,
+		filter: /^forms\/.*/,
 		name: 'forms-templates',
 		templates: true
     }, {
@@ -149,7 +149,7 @@ This means you can create a custom one this way:
 Also, tempera can choose the template compiler per template based on:
 - if embedded script tag, using ```data-template-engine``` attribute
 - if bundled, using ```_templateEngine``` module property (NOT IMPLEMENTED YET)
-- if ajax requested (ie. not compiled) using a comment in first line (NOT IMPLEMENTED YET) or an http response header
+- if ajax requested (ie. not compiled) using a comment in first line or an http response header (NOT IMPLEMENTED YET)
 
 On render time, if the template compiler is not found, tempera will try to load it on-the-fly using ```require(['engineName'])```.
 
