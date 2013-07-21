@@ -171,7 +171,7 @@ var moduleFactory = function(exports) {
                 if (render) {
                     return defer.resolve(render);
                 }
-                var templateElement = $('#' + tmp.embeddedIdPrefix + name.replace('/', '-'));
+                var templateElement = $('#' + (tmp.embeddedIdPrefix + name).replace(/\//g, '-'));
                 if (templateElement.length && templateElement.prop('tagName') === 'SCRIPT') {
                     return loadTemplateFromElement(defer, name, templateElement);
                 }

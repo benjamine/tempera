@@ -29,7 +29,7 @@ Promises
 Asynchronous resources
 -----------
 
-By using promises tempera can asynchronously load required resources to load a template right before render.
+By using promises tempera can asynchronously load required resources on-the-fly.
 
 Given this code:
 
@@ -53,7 +53,7 @@ tempera will:
 Multiple loading strategies
 --------------------------
 
-templates can be loading using 3 different strategies with out any change to your templates or loading code. They can be combined according to your needs, tempera will attempt to find templates in this order:
+templates can be loaded using 3 different strategies without any change to your templates or consuming javascript. They can be combined according to your needs, tempera will attempt to find templates in this order:
 
 ### 1. Embedded in script tags
 
@@ -94,7 +94,7 @@ If you're precompiling your templates on server (eg. using a tool like [grunt-ho
     $('#placeholder').tempera('forms/contact-me', data);
 ```
 
-All functions exposed by template AMD modules are added to template cache, finally if the template is still not found in the cache, the template is requested individually with next strategy.
+All functions exposed by template AMD modules (```templates: true```) are added to template cache, finally if the template is still not found in the cache, the template is requested individually with next strategy.
 
 ### 3. Ajax individual templates
 
@@ -125,6 +125,27 @@ If you are using hogan.js or handlebars.js all you need is:
 
 tempera will autodetect any template engine that exposes a browser global (```window.Enginename```) and exposes a ```compile``` function.
 
+This means you can create a custom one this way:
+
+```
+	window.SimpleReplace = {
+		compile: function(source) {
+			return function(data) {
+				return source.replace('$data', data);
+			}
+		}
+	};
+
+	// or using AMD
+	define('SimpleReplace', function(){
+		return {
+			compile: function(source) {
+				// ...
+			}
+		}
+	});
+```
+
 Also, tempera can choose the template compiler per template based on:
 - if embedded script tag, using ```data-template-engine``` attribute
 - if bundled, using ```_templateEngine``` module property (NOT IMPLEMENTED YET)
@@ -132,3 +153,27 @@ Also, tempera can choose the template compiler per template based on:
 
 On render time, if the template compiler is not found, tempera will try to load it on-the-fly using ```require(['engineName'])```.
 
+Pre-fetching
+--------------
+
+```$.tempera.template(name)``` will return a compiled a template (without rendering to a DOM element)
+
+```
+	$.tempera.template('site-title').done(function(template) {
+		document.title = template(sectionName);
+	});
+```
+
+and it can be used to prefetch templates.
+
+```
+	$(window).load(function(){
+		$.when(
+			$.tempera.template('sidebar/recent-visitors'),
+			$.tempera.template('dialogs/login'),
+			$.tempera.template('dialogs/send-feedback')
+		).done(function(){
+			console.log('all templates prefetched');
+		})
+	});
+```
