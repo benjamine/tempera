@@ -1,0 +1,21 @@
+{
+  "name": "tempera",
+  "version": "0.0.0",
+  "description": "asynchronous javascript template loader",
+  "main": "tempera.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/benjamine/tempera"
+  },
+  "keywords": [
+    "template",
+    "loader",
+    "async",
+    "js"
+  ],
+  "author": "Benjamin Eidelman",
+  "license": "MIT"
+}

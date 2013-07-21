@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Tempera Demo</title>
+        <meta name="description" content="Tempera Demo">
+        <link rel="stylesheet" href="style.css">
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.8/require.min.js" type="application/javascript"></script>
+    </head>
+    <body>
+        <a href="https://github.com/benjamine/tempera" id="fork_me">
+            <img alt="Fork me on GitHub" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png">
+        </a>
+        <h1>Tempera Demo</h1>
+
+        <script type="text/javascript">
+            requirejs.config({
+                paths: {
+                    hogan: 'http://cdnjs.cloudflare.com/ajax/libs/hogan.js/2.0.0/hogan',
+                    jquery: 'http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min',
+                    tempera: '../../tempera'
+                },
+                shim: {
+                    tempera: ['jquery'],
+                    hogan: ['jquery']
+                }
+            });
+            require(['jquery'], function(){
+                $(function(){
+                    require(['tempera'], function(){
+                        $.tempera.defaultCompiler = 'hogan';
+                        $.tempera.templatesBaseUrl = '/demo/templates/';
+                        $.tempera.modules = {
+                            'templates/bundle': /^bundle/
+                        };
+
+                        $('.placeholder').tempera('example', { name: 'World' }).done(function(){
+                            console.log('template rendered');                        
+                            $('.placeholder div').tempera('bundle/example', { name: 'World' }).done(function(){
+                                console.log('template2 rendered');
+                                $('#main').append('<div class="newplaceholder"></div>');
+                                $('.newplaceholder').tempera('hello/embedded', { name: 'World' });
+                            });
+                        });
+                    });
+                });
+            });
+        </script>
+
+        <section id="main">
+            <div class="placeholder">
+            </div>
+        </section>
+
+        <script id="tmp-hello-embedded" type="text/html">
+            embedded Hello {{name}}
+        </script>
+
+        <footer>
+            <a href="https://github.com/benjamine/tempera">Download Tempera</a><br>
+            <p class="credits">developed by <a href="http://twitter.com/beneidel">Benjamín Eidelman</a></p>
+        </footer>
+    </body>
+</html>
